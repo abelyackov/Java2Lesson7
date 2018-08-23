@@ -24,13 +24,26 @@ public class AuthService {
 
         try {
             ResultSet rs = stmt.executeQuery(sql);
-            //вызываем метод для проверки активности
+            //проверяем активность пользователя
             if (active.equals("0")) {
                 if (rs.next()) {
                     return rs.getString(1);
                 }
             }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //метод проверки активности по nickname
+    public static String getActiveNickname(String nickname) {
+        String actriveUser = String.format("SELECT Active FROM main \n" +
+                "where login = '%s'\n", nickname);
+        try {
+            ResultSet aUser = stmt.executeQuery(actriveUser);
+            return aUser.getString(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }

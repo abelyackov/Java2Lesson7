@@ -40,14 +40,23 @@ public class ClientHandler {
                     // цикл для работы
                     while (true) {
                         String str = in.readUTF();
-                        if (str.equals("/end")) {
-                            AuthService.setNotActiveByLogin(nick);
-                            out.writeUTF("/serverclosed");
-                            break;
+                        //проверка на введенный текст, если текст начинается на /w, то вызываем метод отправки сообщения на сервере
+                        //и передает в метод nickname и сообщение
+                        String[] msgForNickname = str.split(" ");
+                        if (msgForNickname[0].equals("/w"))
+                            server.msgForName(msgForNickname[1], msgForNickname[2]);
+                        else {
+                            if (str.equals("/end")) {
+                                AuthService.setNotActiveByLogin(nick);
+                                out.writeUTF("/serverclosed");
+                                break;
+                            }
+                            server.broadcastMsg(nick + ": " + str);
+                            System.out.println("Client: " + str);
                         }
-                        server.broadcastMsg(nick + ": " + str);
-                        System.out.println("Client: " + str);
+
                     }
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -70,9 +79,13 @@ public class ClientHandler {
                     server.unsubscibe(this);
                 }
             }).start();
-        } catch (Exception e) {
+        } catch (
+                Exception e)
+
+        {
             e.printStackTrace();
         }
+
     }
 
     public void sendMsg(String msg) {

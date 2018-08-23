@@ -45,6 +45,13 @@ public class Server {
             o.sendMsg(msg);
         }
     }
+    //пока не работающий метод поиска по нику среди клиентов, для отправки личного сообщения
+    public void msgForName(String nickname, String msg) {
+        for (ClientHandler o : clients) {
+            if (o.equals(nickname) && AuthService.getActiveNickname(nickname).equals("1"))
+                o.sendMsg(msg);
+        }
+    }
 
     public void subscibe(ClientHandler clientHandler) {
         clients.add(clientHandler);
